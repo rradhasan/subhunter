@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %} Subhunter - Home {% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form action="/scan" method="post">
+        <input type="text" name="domain" id="domain" placeholder="Enter Domain">
+        <button type="submit">Scan</button>
+    </form>
+{% endblock %}

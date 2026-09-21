@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Scan — {{ scan["domain"] }}{% endblock %}
+{% block content %}
+<h2>Scan Detail — {{ scan["domain"] }}</h2>
+<p>[*] Timestamp   : {{ scan["timestamp"] }}</p>
+<p>[+] Discovered  : {{ scan["total_discovered"] }}</p>
+<p>[+] Live        : {{ scan["total_live"] }}</p>
+<p>[-] Dead        : {{ scan["total_dead"] }}</p>
+
+<table border="1" style="width:100%; border-color:#00ff00; margin-top:20px;">
+    <tr>
+        <th>URL</th>
+        <th>Status</th>
+        <th>Tech</th>
+        <th>Score</th>
+    </tr>
+    {% for f in findings %}
+    <tr>
+        <td>{{ f["url"] }}</td>
+        <td>{{ f["status"] }}</td>
+        <td>{{ f["tech"] }}</td>
+        <td>{{ f["score"] }}%</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if not findings %}
+<p>[-] No findings recorded for this scan.</p>
+{% endif %}
+
+<br>
+<a href="/history" style="color:#00ff00;">[← Back to History]</a>
+{% endblock %}

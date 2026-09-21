@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Results — {{ domain }}{% endblock %}
+{% block content %}
+
+<h2>Scan Results — {{ domain }}</h2>
+<p>[+] Discovered : {{ targets|length }}</p>
+<p>[+] Live       : {{ fingerprints|length }}</p>
+<p>[-] Dead       : {{ targets|length - fingerprints|length }}</p>
+
+<table border="1" style="width:100%; border-color:#00ff00;">
+    <tr>
+        <th>URL</th>
+        <th>Status</th>
+        <th>Tech</th>
+        <th>Score</th>
+    </tr>
+    {% for fp in fingerprints %}
+    <tr>
+        <td>{{ fp.url }}</td>
+        <td>{{ fp.status }}</td>
+        <td>{{ fp.tech }}</td>
+        <td>{{ fp.score }}%</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if not fingerprints %}
+    <p>[-] No live targets found.</p>
+{% endif %}
+
+{% endblock %}
