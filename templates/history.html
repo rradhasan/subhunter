@@ -1,31 +1,50 @@
-{% extends "base.html" %}
-{% block title %}Scan History{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% block title %}Scan History{% endblock %} {% block
+content %}
 <h2>Scan History</h2>
 {% if history %}
-<table border="1" style="width:100%; border-color:#00ff00;">
-    <tr>
-        <th>ID</th>
-        <th>Domain</th>
-        <th>Live</th>
-        <th>Discovered</th>
-        <th>Timestamp</th>
-    </tr>
-    {% for entry in history %}
-    <tr>
-        <td>{{ entry["id"] }}</td>
-        <td>
-            <a href="/scan/{{ entry['id'] }}" style="color:#00ff00;">
-                {{ entry["domain"] }}
-            </a>
-        </td>
-        <td>{{ entry["total_live"] }}</td>
-        <td>{{ entry["total_discovered"] }}</td>
-        <td>{{ entry["timestamp"] }}</td>
-    </tr>
-    {% endfor %}
+<table border="1" style="width: 100%; border-color: #00ff00">
+  <tr>
+    <th>ID</th>
+    <th>Domain</th>
+    <th>Live</th>
+    <th>Discovered</th>
+    <th>Timestamp</th>
+    <th>Action</th>
+  </tr>
+  {% for entry in history %}
+  <tr>
+    <td>{{ entry["id"] }}</td>
+    <td>
+      <a href="/scan/{{ entry['id'] }}" style="color: #00ff00">
+        {{ entry["domain"] }}
+      </a>
+    </td>
+    <td>{{ entry["total_live"] }}</td>
+    <td>{{ entry["total_discovered"] }}</td>
+    <td>{{ entry["timestamp"] }}</td>
+    <td>
+      <form
+        action="/scan/{{ entry['id'] }}/delete"
+        method="POST"
+        style="display: inline"
+      >
+        <button
+          type="submit"
+          style="
+            background: #ff0000;
+            color: #000;
+            border: none;
+            cursor: pointer;
+          "
+          onclick="return confirm('Delete this scan?');"
+        >
+          [Delete]
+        </button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
 </table>
 {% else %}
 <p>[-] No scans yet.</p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

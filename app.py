@@ -84,13 +84,32 @@ def scan():
 @login_required
 def scan_detail(scan_id):
     scan = db.get_connection().execute(
-        "SELECT * FROM scans WHERE id = ?", (scan_id,)
+        "SELECT * FROM scans WHERE id = ?", (scan_id,),
+        (scan_id, session["user_id"])
     ).fetchone()
     findings = db.get_findings(scan_id)
     if not scan:
-        flash("Scan not found")
+        flash("Scan not found or access denied")
         return redirect(url_for("history"))
     return render_template("scan_details.html", scan=scan, findings=findings)
+
+@app.route("/scan/<int:scan_id>/delete", methods=["POST"])
+@login_required
+def delete(scan_id):
+    conn = db.get_connection()
+    scan = conn.execute(
+        "SELECT * FROM scans WHERE id = ? AND user_id = ?",
+        (scan_id, session["user_id"])
+    ).fetchone()
+    if not scan:
+        flash("[!] Scan not found or access denied")
+        return redirect(url_for("history"))
+    conn.execute("DELETE FROM findings WHERE scan_id = ?", (scan_id,))
+    conn.execute("DELETE FROM scans WHERE id = ?", (scan_id,))
+    conn.commit()
+    conn.close()
+    flash("[+] Scan Deleted")
+    return redirect(url_for("history"))
 
 
 @app.route("/register", methods=["GET", "POST"])

@@ -15,6 +15,7 @@ class Database:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS scans (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
                 domain TEXT NOT NULL,
                 timestamp TEXT DEFAULT (datetime('now')),
                 total_discovered INTEGER DEFAULT 0,
